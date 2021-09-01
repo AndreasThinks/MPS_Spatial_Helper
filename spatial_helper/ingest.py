@@ -1,11 +1,11 @@
 import os
-
 import geopandas
 import pandas as pd
 
 
 def calc_cchi(lon_hex, crime_file, cchi_lookup, minor_class):
     """calculcates CCCHI from an individual CRIS file"""
+
     if lon_hex.crs != crime_file.crs:
         crime_file = crime_file.set_crs(lon_hex.crs, allow_override=True)
     crime_per_grid = geopandas.sjoin(crime_file, lon_hex, how="left", op='within').drop_duplicates()
@@ -19,6 +19,7 @@ def calc_cchi(lon_hex, crime_file, cchi_lookup, minor_class):
 
 def os_poi_to_hex(os_items, hexes):
     """takes a hex grid and an OS file and retuyrns a count per grid"""
+
     if os_items.crs != hexes.crs:
         os_items = os_items.to_crs(hexes.crs)
     block_with_hex = geopandas.sjoin(os_items, hexes, how="left", op='within')
@@ -28,6 +29,7 @@ def os_poi_to_hex(os_items, hexes):
 def osm_feat_to_hex(osm_items, grid, osm_type, category="type"):
     """takes a list of OSM items, a grid, a type of item and optionally a key to filter by, and returns the grid by
     h3 """
+
     if osm_items.crs != grid.crs:
         osm_items = osm_items.to_crs(grid.crs)
     subset = osm_items[osm_items[category] == osm_type].copy()
@@ -37,6 +39,7 @@ def osm_feat_to_hex(osm_items, grid, osm_type, category="type"):
 
 def bcu_to_grid(bcu_borders, grid):
     """takes BCU borders and a grid, and assigns them fairly"""
+
     grid_with_borough = geopandas.sjoin(grid, bcu_borders, op='intersects')
     grid_bcu_cnt = grid_with_borough[["CAD_Ref", "BCU_Code"]].groupby(["CAD_Ref"]).count().sort_values(
         by=["BCU_Code"]).reset_index()
@@ -54,6 +57,7 @@ def bcu_to_grid(bcu_borders, grid):
 def overlap_to_grid(new_borders, identifier, grid, g_identifier):
     """takes a set of borders, an identifier per object like an LSOA or CAD ID,  and a grid, and an identifier for
     that, and assigns the border items to teh grid """
+
     grid_with_borough = geopandas.sjoin(grid, new_borders, op='intersects')
     grid_bcu_cnt = grid_with_borough[[g_identifier, identifier]].groupby([g_identifier]).count().sort_values(
         by=[identifier]).reset_index()
@@ -70,6 +74,7 @@ def overlap_to_grid(new_borders, identifier, grid, g_identifier):
 
 def crime_cad_grid(crime_df, grid, grid_ref, major_class):
     """takes a crime df and a grid, grid reference column, and returns a count, median and mean per grid"""
+
     if crime_df.crs != grid.crs:
         crime_df = crime_df.set_crs(grid.crs, allow_override=True)
     if "index_right" in crime_df.columns.to_list():
@@ -93,6 +98,7 @@ def crime_cad_grid(crime_df, grid, grid_ref, major_class):
 
 def cad_to_grid(grid, grid_ref, cads):
     """takes a geofile of grids, an index column name, and a grid and returns a count, median and mean per grid"""
+
     if cads.crs != grid.crs:
         cads = cads.set_crs(grid.crs, allow_override=True)
     if "index_right" in cads.columns.to_list():
@@ -116,6 +122,7 @@ def cad_to_grid(grid, grid_ref, cads):
 def cad_to_grid_time(grid, grid_ref, cads, time="day"):
     """takes a geofile of grids, an index column name, and a grid and returns a count, as well as a time of day (
     0600-1900) or night. """
+
     if cads.crs != grid.crs:
         cads = cads.set_crs(grid.crs, allow_override=True)
     if "index_right" in cads.columns.to_list():
@@ -140,6 +147,7 @@ def cad_to_grid_time(grid, grid_ref, cads, time="day"):
 
 def cad_to_grid_cats(grid, grid_ref, cads):
     """takes a  geofile , index column,  and returns a count, median and mean per grid"""
+
     if cads.crs != grid.crs:
         cads = cads.set_crs(grid.crs, allow_override=True)
     if "index_right" in cads.columns.to_list():
@@ -168,6 +176,7 @@ def cad_to_grid_cats(grid, grid_ref, cads):
 def agg_cad_directory(directory, grid, grid_ref, exclude_shout=True):
     """takes all cads in a directory, aggregates and returns a list of grids, and checks wheter you want to exclude
     op shout """
+
     if exclude_shout:
         print("Op Shout Excluded, True")
     all_borough = []
@@ -177,7 +186,7 @@ def agg_cad_directory(directory, grid, grid_ref, exclude_shout=True):
             filename = geopandas.read_file(directory + "\\" + filename, crs="EPSG:27700")
             if exclude_shout:
                 filename = filename[~((filename["X"] == 523769) & (filename["Y"] == 180824) & (
-                            filename["OpeningCode_Description"] == "Concern For Safety"))].copy()
+                        filename["OpeningCode_Description"] == "Concern For Safety"))].copy()
             all_borough.append(filename)
         else:
             continue
@@ -189,6 +198,7 @@ def agg_cad_directory(directory, grid, grid_ref, exclude_shout=True):
 def agg_cad_directory_time(directory, grid, grid_ref, exclude_shout=True):
     """takes all cads in a directory, aggregates and returns a list of grids v3, an optionally a function,
     as well as exclude op shout """
+
     all_borough = []
     if exclude_shout:
         print("Op Shout Excluded, True")
@@ -198,7 +208,7 @@ def agg_cad_directory_time(directory, grid, grid_ref, exclude_shout=True):
             filename = geopandas.read_file(directory + "\\" + filename, crs="EPSG:27700")
             if exclude_shout:
                 filename = filename[~((filename["X"] == 523769) & (filename["Y"] == 180824) & (
-                            filename["OpeningCode_Description"] == "Concern For Safety"))].copy()
+                        filename["OpeningCode_Description"] == "Concern For Safety"))].copy()
             all_borough.append(filename)
         else:
             continue
@@ -210,6 +220,7 @@ def agg_cad_directory_time(directory, grid, grid_ref, exclude_shout=True):
 def agg_cad_code_directory(directory, theme, suffix, grid, grid_ref):
     """takes all cads in a directory, an opening code and a column name suffix, aggregates and returns a list of
     grids v3 """
+
     all_borough = []
     for filename in os.listdir(directory):
         if filename.endswith(".tab"):
