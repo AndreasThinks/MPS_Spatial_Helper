@@ -1,20 +1,9 @@
-# `src` package
+# `MPS_Spatial_Helper` package
 
-All functions for this project, should be stored in this folder. **All tests should be stored in the `tests` folder**,
-which is one-level above this folder in the main project directory.
+A collection of code designed to help ingestion, manipulation and visualisation of MPS spatial data
 
 The sub-folders should be used as follows:
 
-- `make_data`: Data processing-related functions;
-- `make_features`: Feature-related functions, for example, functions to create features from processed data;
-- `make_models`: Model-related functions;
-- `make_visualisations`: Functions to produce visualisations; and
-- `utils`: Utility functions that are helpful in the project.
-
-Feel free to create/rename/delete these folders as required, as they will not be necessary for each and every project.
-
-It is strongly suggested that you import functions in the `src` `__init__.py` script. You should also try to use
-absolute imports in this script whenever possible; relative imports are not discouraged, but can be an issue for
-projects where the directory structure is likely to change. See [PEP 328][pep-328] for further information.
-
-[pep-328]: https://www.python.org/dev/peps/pep-0328/
+- `create`: For creating geographical objects for analysis and processing;
+- `display`: For creating and displaying maps;
+- `ingest`: For ingesting data from MPS sources;
