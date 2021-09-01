@@ -1,5 +1,0 @@
-# Ignore Notebooks
-*.ipynb
-
-# Ignore VS Code Settings
-.vscode/
