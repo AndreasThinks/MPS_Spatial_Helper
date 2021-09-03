@@ -4,8 +4,19 @@ A collection of code designed to help ingestion, manipulation and visualisation 
 
 Due to issues with Geopandas and PIP, if you are running Windows, we recommend installing this first using Conda.
 
-The sub-folders should be used as follows:
+### Installation
+Install directly from github using:
+`python -m pip install git+https://github.com/Data-Science-Policing-Security/MPS_Spatial_Helper`
 
-- `create`: For creating geographical objects for analysis and processing;
-- `display`: For creating and displaying maps;
-- `ingest`: For ingesting data from MPS sources;
+
+### Usage
+
+The package contains 3 sub-modules
+#### Live
+- `create`: For creating geographical objects for analysis and processing using H3 grids
+
+Please see [the sample notebook](https://github.com/Data-Science-Policing-Security/MPS_Spatial_Helper/blob/main/sample_notebooks/making_h3_grid.ipynb) for detailed instructions and examples.
+
+#### Test
+- `display`: *[in testing] For creating and displaying maps;*
+- `ingest`: *[in testing] For ingesting data from MPS sources;*
